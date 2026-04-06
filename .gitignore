@@ -1,0 +1,12 @@
+# Ignore image files
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.svg
+
+# Ignore output folders
+output/
+results/
+images/
