@@ -1,23 +1,13 @@
-# Data loading utilities for UCI Gas Sensor Array Drift dataset in LibSVM format.
-
 from __future__ import annotations
 import re
-
 from dataclasses import dataclass
-
 from pathlib import Path
-
 from typing import List
-
 import numpy as np
-
 import pandas as pd
-
 from sklearn.datasets import load_svmlight_file
 @dataclass(slots=True)
 class LoadedData:
-    # Container for loaded dataset and metadata.
-
     df: pd.DataFrame
     feature_cols: List[str]
     batch_ids: List[int]
@@ -30,8 +20,6 @@ def _batch_index(file_path: Path) -> int:
     return int(match.group(1))
 
 def load_batches(dataset_dir: Path, pattern: str, n_features: int) -> LoadedData:
-    # Load all batch files and return one time-ordered dataframe.
-
     files = sorted(dataset_dir.glob(pattern), key=_batch_index)
     if not files:
         raise FileNotFoundError(f"No files found in {dataset_dir} with pattern {pattern}")

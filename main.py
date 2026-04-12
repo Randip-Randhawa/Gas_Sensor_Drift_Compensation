@@ -1,12 +1,12 @@
 from __future__ import annotations
 import pandas as pd
 from config import CONFIG
-from src.comparison import build_comparison_table, build_summary_text
+from src.comparison import build_summary_text, generate_comparison_table
 from src.data_loader import load_batches
 from src.drift_detection import drift_magnitude_by_batch
 from src.eda import run_basic_eda
 from src.experiments import run_all_experiments
-from src.utils import ensure_dir, save_json, save_text, set_seed
+from src.utils import ensure_dir, save_text, set_seed
 from src.visualization import (
     plot_accuracy_vs_batch,
     plot_adwin_error,
@@ -41,6 +41,7 @@ def main() -> None:
         index=False,
         columns=["model", "batch_id", "accuracy", "precision", "recall", "f1_score"],
     )
+    generate_comparison_table(metrics_df, CONFIG.results_dir / "comparison_table.csv")
     exp_lines = per_batch_df[
         per_batch_df["experiment"].isin(["static_train_once", "sliding_window", "online_incremental"])
     ]
@@ -82,25 +83,11 @@ def main() -> None:
     )
     overall_df = metrics_df[metrics_df["metric_level"] == "overall"].copy()
     plot_model_comparison_bar(overall_df, CONFIG.plots_dir / "model_comparison_bar.png")
-    comparison_df = build_comparison_table(overall_df)
-    comparison_df.to_csv(
-        CONFIG.results_dir / "comparison_table.csv",
-        index=False,
-        columns=["Model", "Accuracy", "Precision", "Recall", "F1-Score"],
-    )
-    save_json(
-        CONFIG.results_dir / "comparison_table.json",
-        comparison_df[["Model", "Accuracy", "Precision", "Recall", "F1-Score"]].to_dict(orient="records"),
-    )
-    summary = build_summary_text(
-        comparison_df=comparison_df,
-        per_batch_df=per_batch_df,
-        drift_df=drift_df,
-        adwin_drifts=out.adwin_result.drift_indices,
-    )
+    summary = build_summary_text(metrics_df)
     save_text(CONFIG.results_dir / "summary.txt", summary)
     print("Pipeline complete.")
     print(f"Metrics: {CONFIG.results_dir / 'metrics.csv'}")
+    print(f"Comparison: {CONFIG.results_dir / 'comparison_table.csv'}")
     print(f"Summary: {CONFIG.results_dir / 'summary.txt'}")
     print(f"Plots directory: {CONFIG.plots_dir}")
 if __name__ == "__main__":

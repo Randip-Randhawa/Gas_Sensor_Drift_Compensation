@@ -11,11 +11,11 @@ from sklearn.metrics import (
 )
 def accuracy(y_true: Iterable[int], y_pred: Iterable[int]) -> float:
     return float(accuracy_score(list(y_true), list(y_pred)))
-def precision(y_true: Iterable[int], y_pred: Iterable[int], average: str = "weighted") -> float:
+def precision(y_true: Iterable[int], y_pred: Iterable[int], average: str = "macro") -> float:
     return float(precision_score(list(y_true), list(y_pred), average=average, zero_division=0))
-def recall(y_true: Iterable[int], y_pred: Iterable[int], average: str = "weighted") -> float:
+def recall(y_true: Iterable[int], y_pred: Iterable[int], average: str = "macro") -> float:
     return float(recall_score(list(y_true), list(y_pred), average=average, zero_division=0))
-def f1(y_true: Iterable[int], y_pred: Iterable[int], average: str = "weighted") -> float:
+def f1(y_true: Iterable[int], y_pred: Iterable[int], average: str = "macro") -> float:
     return float(f1_score(list(y_true), list(y_pred), average=average, zero_division=0))
 def per_batch_metrics(df_pred: pd.DataFrame) -> pd.DataFrame:
     results = []

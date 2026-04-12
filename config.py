@@ -1,13 +1,8 @@
-# Central configuration for gas sensor drift compensation experiments.
-
 from __future__ import annotations
 from dataclasses import dataclass, field
-
 from pathlib import Path
 @dataclass(slots=True)
 class Config:
-    # Project-level configuration parameters.
-
     root_dir: Path = field(default_factory=lambda: Path(__file__).resolve().parent)
     dataset_dir_name: str = "Dataset"
     data_dir_name: str = "data"
