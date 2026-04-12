@@ -1,1 +1,1 @@
-"""Model package for static, online, adaptive, and ensemble learners."""
+# Model package for static and adaptive learners.
